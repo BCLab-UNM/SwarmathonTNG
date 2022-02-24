@@ -98,27 +98,24 @@ sudo apt-get install python-catkin-tools ros-kinetic-robot-localization ros-kine
 ```
 
 # Install Cryptographic Secrets
-Talk to Mike about how to download the SSH identity onto the new rover. 
+Talk to Carter about how to download the SSH identity onto the new rover. 
+Or read this
+(https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)[https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent]
 
 # Setup the Swarmathon Repo 
-When you have the secrets installed you can connect to the Cabrillo private repo. 
+When you have the secrets installed you can connect to the repo. 
 
 Clone this GitHub repository to your home directory (~), renaming the repo so ROS and catkin can properly identify it:
 
 ```
 cd ~
-git clone git@github.com:BCLab-UNM/Swarmathon-Cabrillo.git rover_workspace
+git clone git@github.com:BCLab-UNM/SwarmathonTNG.git
 ```
 
 Change your current working directory to the root directory of the downloaded repo:
 
 ```
-cd ~/rover_workspace
-```
-
-Check out the master-next branch for Xenial. 
-```
-git checkout master-next
+cd ~/SwarmathonTNG
 ```
 
 Set up [ublox](http://wiki.ros.org/ublox) GPS submodule:
@@ -133,7 +130,7 @@ catkin build
 ```
 Make sure that the project is in your path:
 ```
-echo "source ~/rover_workspace/devel/setup.bash" >> ~/.bashrc
+echo "source ~/SwarmathonTNG/devel/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 ```
 # Setup Hardware Permissions 
@@ -155,5 +152,5 @@ sudo ln -s arduino-1.8.3/ arduino
 ```
 Verify that you can upload code to the Arduino:
 ```
-~/Swarmathon-Cabrillo/misc/build_arduino.sh 
+~/SwarmathonTNG/misc/build_arduino.sh 
 ```
