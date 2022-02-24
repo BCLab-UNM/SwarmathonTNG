@@ -46,8 +46,7 @@
   <node name="apriltag2to1_converter" pkg="apriltags2to1" type="apriltag_converter_node.py"
         respawn="true">
     <param name="camera_frame_id" value="$(arg name)/camera_link" />
-
-    <remap from="targets/out" to="targets" />
+    <remap from="targets/out" to="targets_for_classifier" />
   </node>
 
 </launch>
