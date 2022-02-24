@@ -6,7 +6,7 @@ include_directories(${catkin_INCLUDE_DIRS})
 
 find_package(catkin REQUIRED COMPONENTS
   rospy
-  apriltags_ros
+  apriltags2to1
   cv_bridge
   std_msgs
   message_filters
