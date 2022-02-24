@@ -1,0 +1,8 @@
+<launch>
+  <arg name="name"/>
+  <arg name="file"/>
+  <node name="tensorflow" pkg="tensorflow_classifier" type="cnn_classifier.py"
+        respawn="true">
+    <param name="/TENSORFLOW/model_file_path" value="$(arg file)" />
+  </node>
+</launch>

@@ -4,6 +4,7 @@
   <arg name="name" />
   <arg name="simulation" default="True" />
   <arg name="swarmie_dev" default="None" />
+  <arg name="tensorflow_file" default="$HOME/classifiers/CNN_3_class_GB1_folder_wo_Aug_full_wdrop_512_2_27_e15.h5" />
 
   <group ns="$(arg name)">
     <include file="$(find swarmie)/launch/swarmie.xml">

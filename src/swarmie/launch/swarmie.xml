@@ -1,6 +1,7 @@
 <launch>
 
   <arg name="name"/>
+  <arg name="tensorflow_file"/>
   <arg name="simulation"/>
   <arg name="swarmie_dev"/>
 
@@ -33,6 +34,11 @@
   <include file="$(find swarmie)/launch/topic_tools.xml">
       <arg name="name" value="$(arg name)"/>
       <arg name="simulation" value="$(arg simulation)"  />
+  </include>
+  
+    <include file="$(find swarmie)/launch/tensorflow.xml">
+      <arg name="name" value="$(arg name)"/>
+      <arg name="file" value="$(arg tensorflow_file)" value="" />
   </include>
 
   <node name="diagnostics" pkg="diagnostics" type="diags_node.py" respawn="true"/> 
