@@ -74,7 +74,7 @@ class Task :
         rospy.set_param('~has_block', self.has_block)
 
     def publish_status(self, _event):
-        self.status_pub.publish('+Cabrillo: {}'.format(self.get_task()))
+        self.status_pub.publish('TNG: {}'.format(self.get_task()))
 
     def print_state(self, msg):
         s = String()
