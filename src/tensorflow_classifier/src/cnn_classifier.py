@@ -11,8 +11,7 @@ import rospy
 import sys
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
-from apriltags_ros.msg import AprilTagDetectionArray
-from apriltags_ros.msg import AprilTagDetection
+from apriltags2to1.msg import AprilTagDetection, AprilTagDetectionArray
 import message_filters
 from cv_bridge import CvBridge, CvBridgeError
 import cv2
@@ -34,15 +33,15 @@ class Classifier:
 		self.model = tf.keras.models.load_model(self.model_file_path)
 
 		# setup required ROS publishers and subscribers
-		self.image_data_subscriber = message_filters.Subscriber(self.robot_name + '/camera/image', Image)
-		self.apriltag_subscriber = message_filters.Subscriber(self.robot_name + '/targets_for_classifier', AprilTagDetectionArray)
+		self.image_data_subscriber = message_filters.Subscriber('camera/image', Image)
+		self.apriltag_subscriber = message_filters.Subscriber('targets_for_classifier', AprilTagDetectionArray)
 
 		# use an approximate time filter to keep the above two subscribers synchronized to a single callback
 		self.synchronizer = message_filters.ApproximateTimeSynchronizer([self.image_data_subscriber, self.apriltag_subscriber], 10, 0.1, allow_headerless=True)
 		self.synchronizer.registerCallback(self.image_data_callback)
 
-		self.classifier_publisher = rospy.Publisher(self.robot_name + '/classifier', String, queue_size=10)
-		self.apriltag_publisher = rospy.Publisher(self.robot_name + '/targets', AprilTagDetectionArray, queue_size=10)
+		self.classifier_publisher = rospy.Publisher('classifier', String, queue_size=10)
+		self.apriltag_publisher = rospy.Publisher('targets', AprilTagDetectionArray, queue_size=10)
 
 	def image_data_callback(self, image_msg, apriltag_msg):
 		"""
@@ -90,11 +89,7 @@ class Classifier:
 if __name__ == '__main__':
 	""" initialize and start ROS node object """
 	try:
-		if len(sys.argv) > 1:
-			robot_name = sys.argv[1]
-		else:
-			robot_name = socket.gethostname()
-
+		robot_name = rospy.get_namespace().strip('/')
 		rospy.init_node(robot_name + '_TENSORFLOW_CLASSIFIER')
 		Classifier(robot_name)
 		rospy.spin()
