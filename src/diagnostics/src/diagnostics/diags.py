@@ -105,7 +105,7 @@ class Diagnostics:
             self._diags_log.publish(_ok("Physical rover", self._rover_name, 'is initializing.'))        
 
         # FIXME: Need to sub the rover's wifi interface
-        self.interface = 'wlp2s0'
+        self.interface = 'wlp0s20f3'
         self.topics = [
                 "imu",
                 "odom",
