@@ -38,8 +38,11 @@
   
     <include file="$(find swarmie)/launch/tensorflow.xml">
       <arg name="name" value="$(arg name)"/>
-      <arg name="file" value="$(arg tensorflow_file)" value="" />
+      <arg name="file" value="$(arg tensorflow_file)"/>
   </include>
+  <rosparam param="/TENSORFLOW/model_file_path" subst_value="True">
+        "$(arg tensorflow_file)"
+      </rosparam>
 
   <node name="diagnostics" pkg="diagnostics" type="diags_node.py" respawn="true"/> 
   
