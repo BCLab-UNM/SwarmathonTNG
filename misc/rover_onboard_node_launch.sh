@@ -1,9 +1,8 @@
 #!/bin/bash
 
 set -e
-
 skip_arduino=0
-tf_model=`find ./classifiers -type f -name "*.h5" | head -n1`
+tf_model="$PWD""/"`find classifiers -type f -name "*.h5" | head -n1`
 for arg in "$@"
 do
     case "$arg" in
@@ -27,8 +26,9 @@ done
 if [ -f "$tf_model" ]; then
     echo "Setting tf_model to: $tf_model"
 else
+    echo Got $tf_model
     echo "Missing/Invalid tf_model try:"
-    echo "`find ./classifiers -type f -name "*.h5" | head -n5`" 
+    echo "$PWD""/"`find classifiers -type f -name "*.h5" | head -n1`
     #give the first 5 tf models as a sugestion
     exit 2
 fi
