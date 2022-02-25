@@ -3,18 +3,35 @@
 set -e
 
 skip_arduino=0
+tf_model=`find ./classifiers -type f -name "*.h5" | head -n1`
 for arg in "$@"
 do
     case "$arg" in
     --skip-arduino|-s) 
         skip_arduino=1
         ;;
+    --model=*|-m=*)
+        tf_model="${arg#*=}"
+        ;;
+    --help|-h)
+        echo "./misc/rover_onboard_node_launch.sh [--skip-arduino|-s] [--model=file|-m=file]"
+        exit 0
+        ;;
     *)
-	echo "Unknown argument: $arg"
-	exit -1
+    echo "Unknown argument: $arg"
+    exit -1
         ;;
     esac
 done
+
+if [ -f "$tf_model" ]; then
+    echo "Setting tf_model to: $tf_model"
+else
+    echo "Missing/Invalid tf_model try:"
+    echo "`find ./classifiers -type f -name "*.h5" | head -n5`" 
+    #give the first 5 tf models as a sugestion
+    exit 2
+fi
 
 projdir=$(dirname $0)/..
 
@@ -70,4 +87,5 @@ if [ -f $projdir/devel/setup.bash ]; then
     source $projdir/devel/setup.bash
 fi
 
-roslaunch $launchfile name:=$(hostname) simulation:=False swarmie_dev:=$swarmie_dev ublox_dev:=$ublox_dev
+roslaunch $launchfile name:=$(hostname) tensorflow_file:=$tf_model simulation:=False swarmie_dev:=$swarmie_dev ublox_dev:=$ublox_dev
+
