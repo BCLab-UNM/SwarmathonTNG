@@ -2,3 +2,4 @@ arduino/libraries/* linguist-vendored=true
 src/apriltags_ros/* linguist-vendored=true
 src/mobility/resources/* linguist-detectable=false
 doc/* linguist-documentation=true
+*.h5 filter=lfs diff=lfs merge=lfs -text
