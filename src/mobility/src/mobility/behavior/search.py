@@ -25,7 +25,8 @@ def turnaround(ignore=Obstacle.IS_SONAR | Obstacle.VISION_SAFE):
 def wander():
     try:
         rospy.loginfo("Wandering...")
-        swarmie.drive(random.gauss(2.5, 1), **swarmie.speed_fast)
+        #random.gauss(mean, standard deviation)
+        swarmie.drive(random.gauss(0.5, 0.2), **swarmie.speed_fast)
         prev_heading = swarmie.get_odom_location().get_pose().theta
 
         rospy.loginfo("Circling...")
