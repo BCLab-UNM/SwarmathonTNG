@@ -43,8 +43,8 @@ class Planner:
     STATE_AVOID_RIGHT = 3
     STATE_AVOID_REVERSE = 4
 
-    DISTANCE_OK = 0.5
-    PATHWAY_EDGE_DIST = 0.33  # meters
+    DISTANCE_OK = 0.25
+    PATHWAY_EDGE_DIST = 0.165  # meters
 
     # Number of consecutive times the rover can drive or turn and receive a
     # MoveResult other than SUCCESS before giving up. This is a relatively
