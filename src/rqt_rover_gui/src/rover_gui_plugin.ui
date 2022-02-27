@@ -1482,7 +1482,7 @@ QTabBar::tab:only-one {
 </string>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="sensor_display_tab">
          <attribute name="title">
@@ -1570,6 +1570,16 @@ QTabBar::tab:only-one {
                 <property name="bottomMargin">
                  <number>1</number>
                 </property>
+                <item>
+                 <widget class="QLabel" name="last_classifier_message">
+                  <property name="styleSheet">
+                   <string notr="true">color: rgb(255, 255, 255);</string>
+                  </property>
+                  <property name="text">
+                   <string>None</string>
+                  </property>
+                 </widget>
+                </item>
                 <item>
                  <widget class="QLabel" name="label_43">
                   <property name="styleSheet">
