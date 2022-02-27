@@ -195,6 +195,7 @@ namespace rqt_rover_gui
     connect(ui.font_size_combobox, SIGNAL(activated(int)), this, SLOT(changeFontEventComboBoxEventHandler(int)));
 
     connect(this, SIGNAL(updateCurrentSimulationTimeLabel(QString)), ui.currentSimulationTimeLabel, SLOT(setText(QString)));
+    connect(this, SIGNAL(updateLastClassifierMessage(QString)), ui.last_classifier_message, SLOT(setText(QString)));
     connect(this, SIGNAL(updateObstacleCallCount(QString)), ui.perc_of_time_avoiding_obstacles, SLOT(setText(QString)));
     connect(this, SIGNAL(updateNumberOfTagsCollected(QString)), ui.num_targets_collected_label, SLOT(setText(QString)));
     connect(this, SIGNAL(updateNumberOfSatellites(QString)), ui.gps_numSV_label, SLOT(setText(QString)));
@@ -633,6 +634,11 @@ void RoverGUIPlugin::scoreEventHandler(const ros::MessageEvent<const std_msgs::S
     emit updateNumberOfTagsCollected("<font color='white'>"+QString::fromStdString(tags_collected)+"</font>");
 }
 
+// Takes the published tensorflow Classifier msg and updates the GUI
+void RoverGUIPlugin::ClassifierHandler(const ros::MessageEvent<const std_msgs::String> &msg) {
+    emit updateLastClassifierMessage("<font color='white'>"+QString::fromStdString(msg.getMessage()->data)+"</font>");
+}
+
 void RoverGUIPlugin::simulationTimerEventHandler(const rosgraph_msgs::Clock& msg) {
 
     current_simulated_time_in_seconds = msg.clock.toSec();
@@ -929,6 +935,7 @@ void RoverGUIPlugin::pollRoversTimerEventHandler()
         gps_subscribers[*i] = nh.subscribe("/"+*i+"/odom/navsat_throttle", 10, &RoverGUIPlugin::GPSEventHandler, this);
         gps_nav_solution_subscribers[*i] = nh.subscribe("/"+*i+"/navsol_throttle", 10, &RoverGUIPlugin::GPSNavSolutionEventHandler, this);
         rover_diagnostic_subscribers[*i] = nh.subscribe("/"+*i+"/diagnostics", 1, &RoverGUIPlugin::diagnosticEventHandler, this);
+        classifier_subscribers[*i] = nh.subscribe("/"+*i+"/classifier", 10, &RoverGUIPlugin::ClassifierHandler, this);
 
         RoverStatus rover_status;
         // Build new ui rover list string
@@ -2273,6 +2280,7 @@ void RoverGUIPlugin::clearSimulationButtonEventHandler()
 
     // Clear the task status values
     obstacle_call_count = 0;
+    emit updateLastClassifierMessage("<font color='white'>0</font>");
     emit updateObstacleCallCount("<font color='white'>0</font>");
     emit updateNumberOfTagsCollected("<font color='white'>0</font>");
     emit updateNumberOfSatellites("<font color='white'>---</font>");
