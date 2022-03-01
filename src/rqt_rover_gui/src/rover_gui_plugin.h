@@ -122,6 +122,8 @@ namespace rqt_rover_gui {
 
     void infoLogMessageEventHandler(const ros::MessageEvent<std_msgs::String const>& event);
     void diagLogMessageEventHandler(const ros::MessageEvent<std_msgs::String const>& event);
+    void ClassifierHandler(const ros::MessageEvent<std_msgs::String const>& event);
+
 
     void addModelToGazebo();
     QString addPowerLawTargets();
@@ -167,6 +169,7 @@ namespace rqt_rover_gui {
     void updateCurrentSimulationTimeLabel(QString text);
 
     void updateMapFrameWithCurrentRoverName(QString text);
+    void updateLastClassifierMessage(QString text);
 
   private slots:
 
@@ -250,6 +253,7 @@ namespace rqt_rover_gui {
     ros::Subscriber diag_log_subscriber;
     ros::Subscriber score_subscriber;
     ros::Subscriber simulation_timer_subscriber;
+    map<string,ros::Subscriber> classifier_subscribers;
 
     map<string,ros::Subscriber> status_subscribers;
     map<string,ros::Subscriber> obstacle_subscribers;
