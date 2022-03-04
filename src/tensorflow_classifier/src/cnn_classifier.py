@@ -63,7 +63,7 @@ class Classifier:
     classification = myclass.argmax()
 
     # publish classification results to topics as neccessary
-    msg_class = "Unknown: " + String(classification)
+    msg_class = "Unknown: " + str(classification)
     if classification == 0:
       msg_class = "No cube"
     elif classification == 1:
