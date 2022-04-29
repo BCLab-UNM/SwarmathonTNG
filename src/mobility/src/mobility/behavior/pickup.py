@@ -33,7 +33,7 @@ def setup_approach(save_loc=False):
 
     swarmie.fingers_open()
     swarmie.set_wrist_angle(1.15)
-    rospy.sleep(1)
+    rospy.sleep(3)
 
     block = swarmie.get_nearest_block_location(targets_buffer_age=5.0)
 
@@ -61,7 +61,7 @@ def approach(save_loc=False):
     print ("Attempting a pickup.")
 
     setup_approach(save_loc)
-
+    rospy.sleep(3)
     block = swarmie.get_nearest_block_location(targets_buffer_age=0.5)
 
     if block is not None:
@@ -116,9 +116,9 @@ def recover():
                       ignore=Obstacle.VISION_SAFE | Obstacle.IS_SONAR,
                       timeout=20)
         # Wait a moment to detect tags before possible backing up further
-        rospy.sleep(0.25)
+        rospy.sleep(3)
 
-        block = swarmie.get_nearest_block_location(targets_buffer_age=1.0)
+        block = swarmie.get_nearest_block_location(targets_buffer_age=4.0)
 
         if block is not None:
             pass
@@ -136,7 +136,7 @@ def recover():
 def main(**kwargs):
     global claw_offset_distance
 
-    claw_offset_distance = 0.23
+    claw_offset_distance = 0.4
     if swarmie.simulator_running():
         claw_offset_distance = 0.16
 
