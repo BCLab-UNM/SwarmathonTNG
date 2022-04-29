@@ -662,7 +662,7 @@ class Swarmie(object):
 
     @sync(classifier_lock)
     def good_classification(self):
-        return 1 in self.classifier_queue_index #classification == 1 => "good"
+        return 1 in self.classifier_queue #classification == 1 => "good"
 
 
     def get_latest_targets(self,id=-1):
