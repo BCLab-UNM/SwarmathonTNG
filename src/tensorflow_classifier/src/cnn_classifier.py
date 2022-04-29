@@ -9,7 +9,7 @@ from keras_preprocessing import image
 from keras.models import load_model
 import rospy
 import sys
-from std_msgs.msg import String
+from std_msgs.msg import String, UInt8
 from sensor_msgs.msg import Image
 from apriltags2to1.msg import AprilTagDetection, AprilTagDetectionArray
 import message_filters
@@ -34,15 +34,14 @@ class Classifier:
 
     # setup required ROS publishers and subscribers
     self.image_data_subscriber = message_filters.Subscriber('camera/image', Image)
-    self.apriltag_subscriber = message_filters.Subscriber('targets_for_classifier', AprilTagDetectionArray)
+    self.apriltag_subscriber = message_filters.Subscriber('targets', AprilTagDetectionArray)
 
     # use an approximate time filter to keep the above two subscribers synchronized to a single callback
     self.synchronizer = message_filters.ApproximateTimeSynchronizer(
       [self.image_data_subscriber, self.apriltag_subscriber], 10, 0.1, allow_headerless=True)
     self.synchronizer.registerCallback(self.image_data_callback)
-
+    self.int_classifier_publisher = rospy.Publisher('classifier_int', UInt8, queue_size=5)
     self.classifier_publisher = rospy.Publisher('classifier', String, queue_size=10)
-    self.apriltag_publisher = rospy.Publisher('targets', AprilTagDetectionArray, queue_size=10)
 
   def image_data_callback(self, image_msg, apriltag_msg):
     """
@@ -73,19 +72,7 @@ class Classifier:
 
     # always print the classification of the image from the usb camera as we get it, for debugging purposes
     self.classifier_publisher.publish('classification = ' + msg_class)
-
-    # purge 'bad' classification detections from the apriltag detection array, then publish what remains
-    new_detections = AprilTagDetectionArray()
-    CUBE = 0
-    NEST = 256
-
-    for detection in apriltag_msg.detections:
-      if detection.id == NEST:
-        new_detections.detections.append(detection)
-      elif detection.id == CUBE and classification == 1:
-        new_detections.detections.append(detection)
-
-    self.apriltag_publisher.publish(new_detections)
+    self.int_classifier_publisher.publish(classification)
 
 
 if __name__ == '__main__':
