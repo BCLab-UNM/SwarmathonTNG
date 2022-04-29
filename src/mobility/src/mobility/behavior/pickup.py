@@ -37,7 +37,7 @@ def setup_approach(save_loc=False):
 
     block = swarmie.get_nearest_block_location(targets_buffer_age=5.0)
 
-    if block is not None:
+    if block is not None and swarmie.good_classification():
         print("Making the setup approach.")
         cur_loc = swarmie.get_odom_location().get_pose()
         dist = math.hypot(cur_loc.x - block.x, cur_loc.y - block.y)
