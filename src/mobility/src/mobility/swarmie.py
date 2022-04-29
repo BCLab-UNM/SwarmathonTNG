@@ -290,7 +290,7 @@ class Swarmie(object):
     @sync(classifier_lock)
     def _classifier_int(self, msg) : 
         self.classifier_queue_index = (self.classifier_queue_index + 1) % self.CIRCULAR_CLASSIFIER_BUFFER_SIZE
-        self.classifier_queue[self.classifier_queue_index] = msg
+        self.classifier_queue[self.classifier_queue_index] = msg.data
 
     @sync(swarmie_lock)
     def _obstacle(self, msg) :
