@@ -27,6 +27,7 @@ from apriltags2to1.msg import AprilTagDetection, AprilTagDetectionArray
 import threading 
 
 swarmie_lock = threading.Lock()
+classifier_lock = threading.Lock()
 
 from .utils import block_detection, block_pose, filter_detections, is_moving
 from mobility import sync
@@ -190,6 +191,9 @@ class Swarmie(object):
         self.CIRCULAR_BUFFER_SIZE = 90
         self.targets = [[]]*self.CIRCULAR_BUFFER_SIZE  # The rolling buffer of targets msgs was AprilTagDetectionArray()
         self.targets_index = 0  # Used to keep track of the most recent targets index, holds the values 0-89
+        self.CIRCULAR_CLASSIFIER_BUFFER_SIZE = 5
+        self.classifier_queue = [[]]*self.CIRCULAR_CLASSIFIER_BUFFER_SIZE
+        self.classifier_queue_index = 0
         
         # Intialize this ROS node.
         anon = False
@@ -249,6 +253,7 @@ class Swarmie(object):
         rospy.Subscriber('home_point', PointStamped, self._home_point)
         rospy.Subscriber('home_point/approx', PointStamped, self._home_point,
                          callback_args=True)
+        rospy.Subscriber('classifier_int', UInt8, self._classifier_int)
 
         # Wait for Odometry messages to come in.
         # Don't wait for messages on /obstacle because it's published infrequently
@@ -281,7 +286,12 @@ class Swarmie(object):
     @sync(swarmie_lock)
     def _odom(self, msg) : 
         self.OdomLocation.Odometry = msg
-            
+        
+    @sync(classifier_lock)
+    def _classifier_int(self, msg) : 
+        self.classifier_queue_index = (self.classifier_queue_index + 1) % self.CIRCULAR_CLASSIFIER_BUFFER_SIZE
+        self.classifier_queue[self.classifier_queue_index] = msg.data
+
     @sync(swarmie_lock)
     def _obstacle(self, msg) :
         self.Obstacles &= ~msg.mask 
@@ -649,6 +659,11 @@ class Swarmie(object):
                 # This is the simulator
                 return True
         return False
+
+    @sync(classifier_lock)
+    def good_classification(self):
+        return 1 in self.classifier_queue #classification == 1 => "good"
+
 
     def get_latest_targets(self,id=-1):
         """ Return the latest `apriltags2to1.msg.AprilTagDetectionArray`. (it might be out of date)

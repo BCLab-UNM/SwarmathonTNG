@@ -36,7 +36,11 @@ def setup_approach(save_loc=False):
     rospy.sleep(3)
 
     block = swarmie.get_nearest_block_location(targets_buffer_age=5.0)
-
+    if not swarmie.good_classification():
+        print("No good classified blocks detected.")
+        swarmie.wrist_up()
+        sys.exit(1)
+      
     if block is not None:
         print("Making the setup approach.")
         cur_loc = swarmie.get_odom_location().get_pose()

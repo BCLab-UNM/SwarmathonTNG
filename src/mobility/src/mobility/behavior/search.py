@@ -62,7 +62,7 @@ def random_walk(num_moves):
         print("I found a tag!")
         # Let's drive there to be helpful.
         rospy.sleep(0.3)
-        if not planner.sees_home_tag():
+        if not planner.sees_home_tag() and swarmie.good_classification():
             found_tag = True
             search_exit(0)
 
