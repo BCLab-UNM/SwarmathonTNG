@@ -121,7 +121,7 @@ def return_to_last_exit_position(last_pose, skip_drive_to=False):
     except TagException:
         rospy.sleep(0.3)  # build buffer a little
         # too risky to stop for targets if home is in view too
-        if not planner.sees_home_tag():
+        if not planner.sees_home_tag() and swarmie.good_classification():
             # success!
             found_tag = True
             search_exit(0)
